@@ -1,13 +1,14 @@
 use indexmap::IndexMap;
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
+use std::collections::hash_map::RandomState;
 use std::fmt;
 use std::{cell::RefCell, rc::Rc};
 use uuid::Uuid;
 
 // ------ SubManager ------
 
-type Subscriptions<Ms> = HashMap<TypeId, IndexMap<Uuid, Subscription<Ms>>>;
+type Subscriptions<Ms> = HashMap<TypeId, IndexMap<Uuid, Subscription<Ms>, RandomState>>;
 
 #[derive(Default)]
 pub(crate) struct SubManager<Ms> {
@@ -38,7 +39,7 @@ impl<Ms: 'static> SubManager<Ms> {
 
         let mut subs = self.subs.borrow_mut();
         subs.entry(type_id)
-            .or_insert_with(IndexMap::new)
+            .or_insert_with(IndexMap::default)
             .insert(id, sub);
 
         subs.entry(type_id).and_modify(|subs_group| {
@@ -55,7 +56,7 @@ impl<Ms: 'static> SubManager<Ms> {
 
         let mut subs = self.subs.borrow_mut();
         subs.entry(type_id)
-            .or_insert_with(IndexMap::new)
+            .or_insert_with(IndexMap::default)
             .insert(id, sub);
 
         subs.entry(type_id).and_modify(|subs_group| {

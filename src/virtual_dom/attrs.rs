@@ -1,12 +1,12 @@
 use super::{At, AtValue};
 use indexmap::IndexMap;
-use std::fmt;
+use std::{collections::hash_map::RandomState, fmt};
 
 /// A thinly-wrapped `HashMap` holding DOM attributes
 #[derive(Clone, Debug, PartialEq)]
 pub struct Attrs {
     // We use an IndexMap instead of HashMap here, and in Style, to preserve order.
-    pub vals: IndexMap<At, AtValue>,
+    pub vals: IndexMap<At, AtValue, RandomState>,
 }
 
 /// Create an HTML-compatible string representation
@@ -27,13 +27,13 @@ impl fmt::Display for Attrs {
 }
 
 impl Attrs {
-    pub const fn new(vals: IndexMap<At, AtValue>) -> Self {
+    pub const fn new(vals: IndexMap<At, AtValue, RandomState>) -> Self {
         Self { vals }
     }
 
     pub fn empty() -> Self {
         Self {
-            vals: IndexMap::new(),
+            vals: IndexMap::default(),
         }
     }
 

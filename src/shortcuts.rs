@@ -313,7 +313,7 @@ macro_rules! custom {
 macro_rules! attrs {
     { $($key:expr => $value:expr $(;)?$(,)?)* } => {
         {
-            let mut vals = IndexMap::new();
+            let mut vals = IndexMap::default();
             $(
                 // We can handle arguments of multiple types by using this:
                 // Strings, &strs, bools, numbers etc.

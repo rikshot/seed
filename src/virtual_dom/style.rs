@@ -1,22 +1,22 @@
 use super::{CSSValue, St};
 use indexmap::IndexMap;
-use std::fmt;
+use std::{collections::hash_map::RandomState, fmt};
 
 /// Handle Style separately from Attrs, since it commonly involves multiple parts,
 /// and has a different semantic meaning.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Style {
-    pub vals: IndexMap<St, CSSValue>,
+    pub vals: IndexMap<St, CSSValue, RandomState>,
 }
 
 impl Style {
-    pub const fn new(vals: IndexMap<St, CSSValue>) -> Self {
+    pub const fn new(vals: IndexMap<St, CSSValue, RandomState>) -> Self {
         Self { vals }
     }
 
     pub fn empty() -> Self {
         Self {
-            vals: IndexMap::new(),
+            vals: IndexMap::default(),
         }
     }
 
